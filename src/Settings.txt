@@ -1,0 +1,12 @@
+SETTINGS
+
+Figure 1B:  512 x 512,   offset = .002, noise cutoff = 600 ( or 100?)
+
+Figure 2C,  2048x2044,  sigma = 0.5, offset = .002, noise cutoff = 600
+
+###after new detection algorithm/cuttoff change (area->perimeter)###
+
+Figure 2C Bul Data:  2048x2044, sigma = .5, offset= 0.003, cutoff = 200
+
+
+Figure 1B: sigma = .3, offset= 0.002, cutoff = 50
