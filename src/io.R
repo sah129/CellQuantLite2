@@ -148,3 +148,46 @@ read_in_channels_interactive <- function(imageset)
        ref_dic = ref_dic)
 }
 
+
+read_in_channels_single <- function(imgpath)
+{
+  message("#####################################################")
+
+  
+  img <- readImage(file.path(imgpath))
+  
+  gfp <- img[,,2]
+  cmac <- img[,,1]
+  dic <- NULL
+  
+  ref_img <- readImage(file.path(imgpath),  as.is = TRUE)
+  
+  ref_gfp <- ref_img[,,2]
+  ref_cmac <- ref_img[,,1]
+  ref_dic <- NULL
+  
+  if(numberOfFrames(img) == 3)
+  {
+    dic <- img[,,3]
+    ref_dic <- ref_img[,,3]
+  }
+  
+  list(cmac = cmac, 
+       gfp = gfp, 
+       dic = dic,
+       ref_cmac = ref_cmac, 
+       ref_gfp = ref_gfp,
+       ref_dic = ref_dic)
+}
+
+
+
+
+
+
+
+
+
+
+
+

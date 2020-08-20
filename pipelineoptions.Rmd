@@ -1,0 +1,71 @@
+```{r}
+source('src/functions.R')
+library(gridExtra)
+```
+
+```{r}
+testpath = "test images/aly1-del_aly2-del_415Git1_002.tif"
+res<-pipeline_options(testpath,FALSE,NULL,100)
+```
+
+```{r}
+get_display_helper(res$gfp[[16]], res$channels)
+```
+
+```{r}
+get_display_helper(res$dic[[8]], res$channels)
+```
+```{r}
+res_options <<- res
+```
+
+
+```{r}
+gfp_res <- list(get_display_helper(res$gfp[[1]], res$channels),
+                get_display_helper(res$gfp[[2]], res$channels),
+                get_display_helper(res$gfp[[4]], res$channels),
+                get_display_helper(res$gfp[[8]], res$channels),
+                get_display_helper(res$gfp[[16]], res$channels))
+```
+
+
+
+
+
+```{r}
+dic_res <- list(get_display_helper(res$dic[[1]], res$channels),
+                get_display_helper(res$dic[[2]], res$channels),
+                get_display_helper(res$dic[[4]], res$channels),
+                get_display_helper(res$dic[[8]], res$channels),
+                get_display_helper(res$dic[[16]], res$channels))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

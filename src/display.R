@@ -127,5 +127,19 @@ get_display_img <- function(df,membranes, col_membranes, vacuoles, col_vacuoles,
   }
 }
 
+get_display_helper <- function(final, channels)
+{
+  get_display_img(df = final$df,
+                  membranes = final$membranes, 
+                  col_membranes = 'white', 
+                  vacuoles = final$vacuoles, 
+                  col_vacuoles ='yellow', 
+                  removed = membranes$removed,
+                  closed_vacuoles = TRUE, 
+                  img = channels$gfp, 
+                  showRemoved = FALSE, 
+                  showMemLabels = TRUE, 
+                  showVacLabels = FALSE)
+}
 
 

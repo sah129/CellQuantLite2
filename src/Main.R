@@ -63,14 +63,8 @@ pipeline <- function(image_files, testing, gui, progress, interactive, factor, c
     
     write.csv(final$df, paste0("FinalOutput/Individual Spreadsheets/",imageset[row, "filename"], '_results.csv'), row.names=FALSE)
     results[[row]] <- list(df = final$df,
-                        #   img_gray = img_gray,
-                          # channels = channels, 
                            filename = imageset[row, "filename"])
-                        #   membranes = final$membranes,
-                       #    vacuoles = final$vacuoles,
-                      #     mem_pts = mem_pts,
-                         #  vac_pts = vac_pts,
-                        #   removed_pts = removed_pts)
+                        
     
     
     
