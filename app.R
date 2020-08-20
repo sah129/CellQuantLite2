@@ -15,7 +15,7 @@ ui <- fluidPage(
             h4("Pipeline Options", align = "center"),
             fluidRow(
                 column(1, strong("1.")),
-                column(9, fileInput('input_images', NULL, accept = c('.tif'),multiple=TRUE)),
+                column(9, fileInput('input_images', NULL, accept = c('.tif'),multiple=FALSE)),
                 column(2, actionButton("inputimage_help", "?"))),
             fluidRow(
                 column(1, strong("2.")),

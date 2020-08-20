@@ -15,6 +15,7 @@ pipeline_options <- function(testpath, gui, progress, cutoff)
   channels <- read_in_channels_single(testpath)
   img_gray <- convert_to_grayscale(channels)
   
+  print("##############GFP MEMBRANE DETECTION ALGORITHM###############")
   for(factor in factors)
   {
     membranes <- detect_membranes_new(img_gray, channels, factor, img_gray[,,gfp_channel], cutoff)
@@ -28,6 +29,7 @@ pipeline_options <- function(testpath, gui, progress, cutoff)
   
   }
 
+  print("#################DIC MEMBRANE DETECTION ALGORITHM####################")
   for(factor in factors)
   {
     membranes <- detect_membranes_new(img_gray, channels, factor, img_gray[,,dic_channel], cutoff)

@@ -1,23 +1,13 @@
 ```{r}
 source('src/functions.R')
-library(gridExtra)
+
 ```
 
 ```{r}
-testpath = "test images/aly1-del_aly2-del_415Git1_002.tif"
-res<-pipeline_options(testpath,FALSE,NULL,100)
+testpath = "test images/8-20-20 9ArrD Qdr2 316_001.tif"
+res<-pipeline_options(testpath,FALSE,NULL,1000)
 ```
 
-```{r}
-get_display_helper(res$gfp[[16]], res$channels)
-```
-
-```{r}
-get_display_helper(res$dic[[8]], res$channels)
-```
-```{r}
-res_options <<- res
-```
 
 
 ```{r}
