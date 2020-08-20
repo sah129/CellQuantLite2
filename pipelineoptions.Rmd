@@ -9,6 +9,12 @@ res<-pipeline_options(testpath,FALSE,NULL,1000)
 ```
 
 
+```{r}
+get_display_helper(result$gfp[[16]], result$channels, title  =1)
+```
+
+
+
 
 ```{r}
 gfp_res <- list(get_display_helper(res$gfp[[1]], res$channels),

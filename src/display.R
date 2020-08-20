@@ -90,11 +90,12 @@ get_final_vac_img <- function(vacs, res)
 # showMemLabels:  show membrane labels
 # showVacLabels:  show vacuole labels
 
-get_display_img <- function(df,membranes, col_membranes, vacuoles, col_vacuoles, removed,closed_vacuoles, img, showRemoved, showMemLabels, showVacLabels)
+get_display_img <- function(title, df,membranes, col_membranes, vacuoles, col_vacuoles, removed,closed_vacuoles, img, showRemoved, showMemLabels, showVacLabels)
 {
   if(nrow(df)==0) # nothing detected
   {
     plot(img)
+    title(main = title)
   }
   else
   {
@@ -106,6 +107,7 @@ get_display_img <- function(df,membranes, col_membranes, vacuoles, col_vacuoles,
     if(showRemoved)
       res_img <- paintObjects(removed, tgt = res_img, col = c('red','red'))
     plot(res_img)
+    title(main = title)
     if(showMemLabels)
     {
       text(x = df[,'pm_center_x'],
@@ -127,9 +129,10 @@ get_display_img <- function(df,membranes, col_membranes, vacuoles, col_vacuoles,
   }
 }
 
-get_display_helper <- function(final, channels)
+get_display_helper <- function(final, channels, title)
 {
-  get_display_img(df = final$df,
+  get_display_img(title = title,
+                  df = final$df,
                   membranes = final$membranes, 
                   col_membranes = 'white', 
                   vacuoles = final$vacuoles, 

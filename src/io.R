@@ -154,13 +154,13 @@ read_in_channels_single <- function(imgpath)
   message("#####################################################")
 
   
-  img <- readImage(file.path(imgpath))
+  img <- readImage(file.path(imgpath$datapath))
   
   gfp <- img[,,2]
   cmac <- img[,,1]
   dic <- NULL
   
-  ref_img <- readImage(file.path(imgpath),  as.is = TRUE)
+  ref_img <- readImage(file.path(imgpath$datapath),  as.is = TRUE)
   
   ref_gfp <- ref_img[,,2]
   ref_cmac <- ref_img[,,1]
