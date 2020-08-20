@@ -9,10 +9,10 @@ get_options_output <- function(res)
   })
 }
 
-get_test <- function(res, i) 
+get_test <- function(res, channels, i) 
 {
   renderPlot({
-        get_display_helper(res[[i]], res$channels, title = i)
+        get_display_helper(res[[i]], channels, title = i)
   })
   
   }

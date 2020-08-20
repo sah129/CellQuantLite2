@@ -12,72 +12,54 @@ options(shiny.maxRequestSize = 100*1024^2)
 ui <- fluidPage(
     
     titlePanel("Automated Cell Quant - O'Donnell Lab", windowTitle = "Automated Cell Quant - O'Donnell Lab"),
-    sidebarLayout(
-        sidebarPanel(
-            h4("Pipeline Options", align = "center"),
+   wellPanel(
+            #h4("Pipeline Options", align = "center"),
             fluidRow(
-                column(1, strong("1.")),
-                column(9, fileInput('input_image', NULL, accept = c('.tif'),multiple=FALSE)),
-                column(2, actionButton("inputimage_help", "?"))),
-            fluidRow(
-                column(1, strong("2.")),
-                column(3, textInput("cmac_chan", "CMAC", value = "", placeholder = "1")),
-                column(3, textInput("gfp_chan", "GFP", value = "", placeholder = "2")),
-                column(3, textInput("dic_chan", "DIC", value = "", placeholder = "3")),
-                column(2, br(), actionButton("inputchannels_help", "?"))),
-            fluidRow(
-                column(1, strong("3.")),
-                column(9, textInput("cutoff_value", "Cell size cutoff", placeholder="100")),
-                column(2, br(), actionButton("cutoffvalue_help", "?"))),
+                #column(1, strong("1.")),
+                column(2, br(), fileInput('input_image', NULL, accept = c('.tif'),multiple=FALSE)),
+                column(1, br(), actionButton("inputimage_help", "?")),
             
-            fluidRow(actionButton("show_options", "Demonstate Options for 4 and 5"), align = "center"),
-            br(),
+               # column(1, strong("2.")),
+                column(1, textInput("cmac_chan", "CMAC", value = "", placeholder = "1")),
+                column(1, textInput("gfp_chan", "GFP", value = "", placeholder = "2")),
+                column(1, textInput("dic_chan", "DIC", value = "", placeholder = "3")),
+                column(1, br(), actionButton("inputchannels_help", "?")),
+          
+               # column(1, strong("3.")),
+                column(1, textInput("cutoff_value", "Cutoff", placeholder="100")),
+                column(1, br(), actionButton("cutoffvalue_help", "?")),
             
-            fluidRow(
-              column(1, strong("4.")),
-              column(9, radioButtons("algchoose", "Membrane Detection Algorithm", choices = c("GFP", "DIC"), selected = "GFP", inline = TRUE)),
-              column(2, br(), actionButton("algchoose_help", "?"))),
-            fluidRow(
-              column(1, strong("5.")),
-              
-              column(9, radioButtons("factorchoose", "Factor:", choices = c("1", "2", "4", "8", "16"), selected = "5", inline = TRUE)),
-              
-              
-              column(2, br(), actionButton("factorchoose_help", "?"))),
-            fluidRow(actionButton("run", "Run Pipeline"), align = "center"),
-        width=4),
-        mainPanel(
-          h4("main panel", align = "center"),
+            column(3, br(), fluidRow(actionButton("show_options", "Demonstate Options")))),
+   ),
+       
+        
           #plotOutput("options_demo"),
           h4("GFP Algorithm"),
           fluidRow(
             column(2,plotOutput("gfp1")),
             column(2,plotOutput("gfp2")),
             column(2,plotOutput("gfp4")),
-            column(1,plotOutput("gfp8")),
-            column(1,plotOutput("gfp16"))),
+            column(2,plotOutput("gfp8")),
+            column(2,plotOutput("gfp16"))),
           h4("DIC Algorithm"),
           fluidRow(
             column(2,plotOutput("dic1")),
             column(2,plotOutput("dic2")),
             column(2,plotOutput("dic4")),
-            column(1,plotOutput("dic8")),
-            column(1,plotOutput("dic16"))),
+            column(2,plotOutput("dic8")),
+            column(2,plotOutput("dic16"))),
           
-          width = 8)
+    
         
         
         
         
-    ),
+ 
     
 
-    fluidRow(
-        
-        column(5,uiOutput("contents"))
 
    
-))
+)
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
@@ -140,9 +122,14 @@ server <- function(input, output) {
        }
       else
       {
+        progress <- shiny::Progress$new()
+        
+        on.exit(progress$close())
+        
+        progress$set(message = "Running Test Cases...", value = 0)
+        
         values$options <- pipeline_options(input$input_image,
-                                           gui = FALSE,
-                                           progress = NULL,
+                                           progress = progress,
                                            gfp_chan = input$gfp_chan,
                                            dic_chan = input$dic_chan,
                                            cmac_chan = input$cmac_chan,
@@ -150,17 +137,17 @@ server <- function(input, output) {
                                            )
         if(!is.null(values$options))
         {
-          output$gfp1 <- get_test(values$options$gfp, 1)
-          output$gfp2 <- get_test(values$options$gfp, 2)
-          output$gfp4 <- get_test(values$options$gfp, 4)
-          output$gfp8 <- get_test(values$options$gfp, 8)
-          output$gfp16 <- get_test(values$options$gfp, 16)
+          output$gfp1 <- get_test(values$options$gfp, values$options$channels, 1)
+          output$gfp2 <- get_test(values$options$gfp, values$options$channels,2)
+          output$gfp4 <- get_test(values$options$gfp, values$options$channels,4)
+          output$gfp8 <- get_test(values$options$gfp, values$options$channels,8)
+          output$gfp16 <- get_test(values$options$gfp, values$options$channels,16)
           
-          output$dic1 <- get_test(values$options$dic, 1)
-          output$dic2 <- get_test(values$options$dic, 2)
-          output$dic4 <- get_test(values$options$dic, 4)
-          output$dic8 <- get_test(values$options$dic, 8)
-          output$dic16 <- get_test(values$options$dic, 16)
+          output$dic1 <- get_test(values$options$dic, values$options$channels,1)
+          output$dic2 <- get_test(values$options$dic, values$options$channels,2)
+          output$dic4 <- get_test(values$options$dic, values$options$channels,4)
+          output$dic8 <- get_test(values$options$dic, values$options$channels,8)
+          output$dic16 <- get_test(values$options$dic, values$options$channels,16)
         }
       }
     }) 

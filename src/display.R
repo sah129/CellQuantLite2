@@ -95,7 +95,7 @@ get_display_img <- function(title, df,membranes, col_membranes, vacuoles, col_va
   if(nrow(df)==0) # nothing detected
   {
     plot(img)
-    title(main = title)
+    title(main = title, line = 0)
   }
   else
   {
@@ -107,7 +107,7 @@ get_display_img <- function(title, df,membranes, col_membranes, vacuoles, col_va
     if(showRemoved)
       res_img <- paintObjects(removed, tgt = res_img, col = c('red','red'))
     plot(res_img)
-    title(main = title)
+    title(main = title, line = 0)
     if(showMemLabels)
     {
       text(x = df[,'pm_center_x'],
