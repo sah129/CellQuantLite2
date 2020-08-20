@@ -137,17 +137,22 @@ server <- function(input, output) {
                                            )
         if(!is.null(values$options))
         {
-          output$gfp1 <- get_test(values$options$gfp, values$options$channels, 1)
-          output$gfp2 <- get_test(values$options$gfp, values$options$channels,2)
-          output$gfp4 <- get_test(values$options$gfp, values$options$channels,4)
-          output$gfp8 <- get_test(values$options$gfp, values$options$channels,8)
-          output$gfp16 <- get_test(values$options$gfp, values$options$channels,16)
-          
-          output$dic1 <- get_test(values$options$dic, values$options$channels,1)
-          output$dic2 <- get_test(values$options$dic, values$options$channels,2)
-          output$dic4 <- get_test(values$options$dic, values$options$channels,4)
-          output$dic8 <- get_test(values$options$dic, values$options$channels,8)
-          output$dic16 <- get_test(values$options$dic, values$options$channels,16)
+          if(!is.null(values$options$gfp))
+          {
+            output$gfp1 <- get_test(values$options$gfp, values$options$channels, 1)
+            output$gfp2 <- get_test(values$options$gfp, values$options$channels,2)
+            output$gfp4 <- get_test(values$options$gfp, values$options$channels,4)
+            output$gfp8 <- get_test(values$options$gfp, values$options$channels,8)
+            output$gfp16 <- get_test(values$options$gfp, values$options$channels,16)
+          }
+          if(!is.null(values$options$dic))
+          {
+            output$dic1 <- get_test(values$options$dic, values$options$channels,1)
+            output$dic2 <- get_test(values$options$dic, values$options$channels,2)
+            output$dic4 <- get_test(values$options$dic, values$options$channels,4)
+            output$dic8 <- get_test(values$options$dic, values$options$channels,8)
+            output$dic16 <- get_test(values$options$dic, values$options$channels,16)
+          }
         }
       }
     }) 

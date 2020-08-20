@@ -92,7 +92,12 @@ get_final_vac_img <- function(vacs, res)
 
 get_display_img <- function(title, df,membranes, col_membranes, vacuoles, col_vacuoles, removed,closed_vacuoles, img, showRemoved, showMemLabels, showVacLabels)
 {
-  if(nrow(df)==0) # nothing detected
+  if(is.null(df)) # nothing detected
+  {
+    plot(img)
+    title(main = title, line = 0)
+  }
+  else if(nrow(df)==0) # nothing detected
   {
     plot(img)
     title(main = title, line = 0)
@@ -139,7 +144,7 @@ get_display_helper <- function(final, channels, title)
                   col_vacuoles ='yellow', 
                   removed = membranes$removed,
                   closed_vacuoles = TRUE, 
-                  img = channels$gfp, 
+                  img = channel(normalize(channels$gfp), 'asgreen'), 
                   showRemoved = FALSE, 
                   showMemLabels = TRUE, 
                   showVacLabels = FALSE)
