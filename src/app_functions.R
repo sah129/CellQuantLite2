@@ -13,6 +13,7 @@ get_test <- function(res, channels, i)
 {
   renderPlot({
         get_display_helper(res[[i]], channels, title = i)
+   # get_options_display(res[[i]], channels, title = i)
   })
   
   }

@@ -144,10 +144,25 @@ get_display_helper <- function(final, channels, title)
                   col_vacuoles ='yellow', 
                   removed = membranes$removed,
                   closed_vacuoles = TRUE, 
-                  img = channel(normalize(channels$gfp), 'asgreen'), 
+                  img = channels$gfp, 
                   showRemoved = FALSE, 
                   showMemLabels = TRUE, 
                   showVacLabels = FALSE)
+}
+
+get_options_display <- function(final, channels, title)
+{
+  if(is.null(final)) # nothing detected
+  {
+    plot(channels$gfp)
+    title(main = title, line = 0)
+  }
+  else
+  {
+    res_imgA <- paintObjects(final, tgt = channels$gfp, col = c('white','white'))
+    plot(res_imgA)
+    title(main = title, line=0)
+  }
 }
 
 

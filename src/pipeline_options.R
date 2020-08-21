@@ -40,7 +40,7 @@ pipeline_options <- function(image_file, gui, progress, gfp_chan, cmac_chan, dic
   
       i = i + 1
       results_gfp[[factor]] <- final
-    
+
     },
     error = function(cond)
     {

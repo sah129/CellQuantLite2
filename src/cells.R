@@ -35,16 +35,16 @@ detect_membranes_new <-function(img, channels, factor, chan, cutoff, cnum)
   fm <- computeFeatures.shape(cm)
   noise <- which(fm[,"s.area"]< cutoff) # noise removal
   
-
+  message(paste0("Number of cells detected on first pass: ", length(table(cm))))
   
   membranes <- rmObjects(cm, noise)
-  message(paste0("Number of cells after noise removal: ", length(table(membranes))))
+
   
  
   res <- remove_edge_membranes(membranes, img, channels, cnum)
   
 
-  message(paste0("Number of cells detected on first pass: ", length(table(membranes))))
+  message(paste0("Number of cells after noise removal: ", length(table(membranes))))
   list(removed = res$removed, membranes = res$membranes, FM = res$FM)
 }
 # Removes detected membranes that intersect with image edges.  Saves removed
