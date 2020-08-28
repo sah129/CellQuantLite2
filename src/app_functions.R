@@ -11,9 +11,21 @@ get_options_output <- function(res)
 
 get_test <- function(res, channels, i) 
 {
+  title <- switch(as.character(i),
+                 "1" = "1",
+                 "2" = "2",
+                 "4" = "3",
+                 "8" = "4",
+                 "16" = "5")
   renderPlot({
-        get_display_helper(res[[i]], channels, title = i)
-   # get_options_display(res[[i]], channels, title = i)
+        if(length(res) > 0 )
+          get_display_helper(res[[i]], channels, title = title)
+        else
+        {
+          img <- readImage(file.path('src/res/empty_dic.png'))
+          plot(img)
+          title(main = title, line = 0)
+        }
   })
   
   }

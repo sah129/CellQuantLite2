@@ -12,12 +12,14 @@ find_vacuoles <- function(cell_info, img, channels, cnum)
   # Threshold with an adaptive window and an offset 2 std. dev. from the norm.
   # This is sufficient to pick up only the brightest spots while excluding 
   # haze. 
+ 
+  
   vmask = thresh(img[,,cnum$cmac_channel],w=b,h=b,offset = 2*sd(img[,,cnum$cmac_channel]))
   
-  # Removes minor protrosions that are often a result of overflow PM 
-  # fluorescence.
-  vmask = opening(vmask, makeBrush(5,shape="disc"))
+
   vmask = bwlabel(vmask)
+  
+  # exclude noise!!!
   
   message(paste0("Number of vacuoles detected on first pass: ", format(length(table(vmask)), nsmall = 4)))
   FV <- computeFeatures(vmask, ref= channels$ref_gfp, xname = "vac")
@@ -27,10 +29,11 @@ find_vacuoles <- function(cell_info, img, channels, cnum)
   return(res)
 }
 
+
 # Build the resultant data frame while examining and excluding candidate 
 # membranes and their associated vacuoles. Returns data frame, list of 
 # fragment PM objects, list of PMs where no vacuoles are found.
-exclude_and_bind <- function(mems, vacs)
+exclude_and_bind <- function(mems, vacs, cutoff)
 {
 
   df <- data.frame(matrix(NA, nrow = length(table(mems$membranes)), ncol = 9))
@@ -48,10 +51,16 @@ exclude_and_bind <- function(mems, vacs)
     filled_seg = fillHull(pm_seg) # flood fill
     comp <- pm_seg == filled_seg
     
+  
+    if(any(pm_seg*vacs$vacuoles) == 1)  # excludes accidentally intra cell fluorescence
+    {
+      fragments[i] = i      
+    }
     # If # of pixels in PM is greater than intersection complement, add to 
     # fragment list.  This technique allows whole PMS with some 
     # minor gaps in fluorescence to make the cut. 
-    if(length(which(pm_seg == 1)) > length(which(comp == FALSE)))
+   
+    else if(length(comp == FALSE) < 10)  # 10 pixel grace zone
       fragments[i] = i
     else  
     {
@@ -66,13 +75,11 @@ exclude_and_bind <- function(mems, vacs)
       {
         c_area <-  mems$FM[i, 'membrane.0.s.area']
         v_area <- calc_vac_areas(as.numeric(names(vcount)), vacs$FV)
-        
-        # Exclude cells containing very small combined vacuole area.
-        # The area of the filled membrane would be a much better metric, 
-        # however in the interest of space/memory we will use precomputed 
-        # areas in lieu of another fillHull operation.
-        if(v_area/c_area < .25)
+      
+        if(v_area < (cutoff/10))
+        {
           empty_cells[i] = i
+        }
         else  # populate dataframe
         {
           cmpi <- mems$FM[i, 'membrane.a.b.mean']
@@ -87,9 +94,14 @@ exclude_and_bind <- function(mems, vacs)
                          pm_center_x = mems$FM[i,'membrane.0.m.cx'],
                          pm_center_y = mems$FM[i,'membrane.0.m.cy'])
         }
+        
       }
     }
   }
+  
+  message(paste0(length(unlist(empty_cells))), " empty cells discarded.")
+  message(paste0(length(unlist(fragments))), " membrane fragments discarded.")
+  
   list(df=df, fragments = unlist(fragments), empty_cells = unlist(empty_cells))
 }
 

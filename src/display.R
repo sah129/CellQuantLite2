@@ -90,14 +90,16 @@ get_final_vac_img <- function(vacs, res)
 # showMemLabels:  show membrane labels
 # showVacLabels:  show vacuole labels
 
-get_display_img <- function(title, df,membranes, col_membranes, vacuoles, col_vacuoles, removed,closed_vacuoles, img, showRemoved, showMemLabels, showVacLabels)
+get_display_img <- function(title, final,membranes, col_membranes, vacuoles, col_vacuoles, removed,closed_vacuoles, img, showRemoved, showMemLabels, showVacLabels)
 {
-  if(is.null(df)) # nothing detected
+  img <- channel(img, 'rgb')
+  
+  if(is.null(final)) # nothing detected
   {
     plot(img)
     title(main = title, line = 0)
   }
-  else if(nrow(df)==0) # nothing detected
+  else if(nrow(final$df)==0) # nothing detected
   {
     plot(img)
     title(main = title, line = 0)
@@ -115,9 +117,9 @@ get_display_img <- function(title, df,membranes, col_membranes, vacuoles, col_va
     title(main = title, line = 0)
     if(showMemLabels)
     {
-      text(x = df[,'pm_center_x'],
-           y = df[, 'pm_center_y'],
-           labels = df[,'CellID'], 
+      text(x = final$df[,'pm_center_x'],
+           y = final$df[, 'pm_center_y'],
+           labels = final$df[,'CellID'], 
            col = "red", 
            pos = c(2,3), #(2,3) = to the left of and above
            vfont = c("sans serif", "bold"))
@@ -126,7 +128,7 @@ get_display_img <- function(title, df,membranes, col_membranes, vacuoles, col_va
     {
       text(x = df[,'pm_center_x'],
            y = df[, 'pm_center_y'],
-           labels = df[,'vacuoles'], 
+           labels = final$df[,'vacuoles'], 
            col = "orange", 
            pos = c(3,4), # (3,4) = to the right of and above
            vfont = c("sans serif", "bold"))
@@ -136,18 +138,21 @@ get_display_img <- function(title, df,membranes, col_membranes, vacuoles, col_va
 
 get_display_helper <- function(final, channels, title)
 {
+  
+
   get_display_img(title = title,
-                  df = final$df,
+                  final = final,
                   membranes = final$membranes, 
                   col_membranes = 'white', 
                   vacuoles = final$vacuoles, 
-                  col_vacuoles ='yellow', 
+                  col_vacuoles ='blue', 
                   removed = membranes$removed,
                   closed_vacuoles = TRUE, 
                   img = channels$gfp, 
                   showRemoved = FALSE, 
                   showMemLabels = TRUE, 
                   showVacLabels = FALSE)
+  
 }
 
 get_options_display <- function(final, channels, title)

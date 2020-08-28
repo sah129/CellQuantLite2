@@ -17,7 +17,7 @@ pipeline_options <- function(image_file, gui, progress, gfp_chan, cmac_chan, dic
   results_gfp = list()
   results_dic = list()
 
-  factors = list(1,2,4,8,16)
+  #factors = list(1,2,4,8,16)
 
 
   
@@ -27,15 +27,15 @@ pipeline_options <- function(image_file, gui, progress, gfp_chan, cmac_chan, dic
   
   
   print("##############GFP MEMBRANE DETECTION ALGORITHM###############")
-  for(factor in factors)
+  for(factor in c(1,2,4,8,16))
   {
     out<- tryCatch({
     
       progress$inc(1/10, detail = paste0("GFP DETECTION (iteration ", i, ")" ))
       
-      membranes <- detect_membranes_new(img_gray, channels, factor, img_gray[,,cnum$gfp_channel], as.numeric(cutoff), cnum)
+      membranes <- detect_membranes(img_gray, channels, factor, img_gray[,,cnum$gfp_channel], as.numeric(cutoff), cnum)
       vacuoles <- find_vacuoles(membranes, img_gray, channels, cnum)
-      res <- exclude_and_bind(membranes, vacuoles)
+      res <- exclude_and_bind(membranes, vacuoles, as.numeric(cutoff))
       final<-tidy_up(membranes,vacuoles,res)
   
       i = i + 1
@@ -45,6 +45,7 @@ pipeline_options <- function(image_file, gui, progress, gfp_chan, cmac_chan, dic
     error = function(cond)
     {
       print(paste0("Error analyzing ", image_file[1,"name"], " in GFP detection for factor=", factor))
+      print(cond)
       results_gfp[[factor]] <- NULL
       progress$inc(1/10, detail = paste0("GFP DETECTION (iteration ", i, ")" ))
       i = i + 1
@@ -55,15 +56,15 @@ pipeline_options <- function(image_file, gui, progress, gfp_chan, cmac_chan, dic
 
   i = 1
   print("#################DIC MEMBRANE DETECTION ALGORITHM####################")
-  for(factor in factors)
+  for(factor in c(1,2,4))
   {
     out<- tryCatch({
       
       progress$inc(1/10, detail = paste0("DIC DETECTION (iteration ", i, ")" ))
       
-      membranes <- detect_membranes_new(img_gray, channels, factor, img_gray[,,cnum$dic_channel], as.numeric(cutoff), cnum)
+      membranes <- detect_membranes(img_gray, channels, factor, img_gray[,,cnum$dic_channel], as.numeric(cutoff), cnum)
       vacuoles <- find_vacuoles(membranes, img_gray, channels, cnum)
-      res <- exclude_and_bind(membranes, vacuoles)
+      res <- exclude_and_bind(membranes, vacuoles, as.numeric(cutoff))
       final<-tidy_up(membranes,vacuoles,res)
       
   
@@ -74,6 +75,7 @@ pipeline_options <- function(image_file, gui, progress, gfp_chan, cmac_chan, dic
     error = function(cond)
     {
       print(paste0("Error analyzing ", image_file[1,"name"], " in DIC detection for factor=", factor))
+      print(cond)
       results_dic[[factor]] <- NULL
       progress$inc(1/10, detail = paste0("DIC DETECTION (iteration ", i, ")" ))
       i = i + 1
@@ -87,7 +89,7 @@ pipeline_options <- function(image_file, gui, progress, gfp_chan, cmac_chan, dic
   
   message("End of pipeline_options")
   
-  result <<- list(gfp = results_gfp, dic = results_dic, channels = channels)
+  #result <<- list(gfp = results_gfp, dic = results_dic, channels = channels)
   list(gfp = results_gfp, dic = results_dic, channels = channels)
 }
 

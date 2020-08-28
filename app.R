@@ -1,17 +1,12 @@
 
-library(shiny)
-library(dplyr)
-library(stringr)
-library(gridExtra)
 
 source('src/functions.R')
-source('src/Main.R')
-source('src/app_functions.R')
+
 
 options(shiny.maxRequestSize = 100*1024^2)
 ui <- fluidPage(
     
-    titlePanel("Automated Cell Quant - O'Donnell Lab", windowTitle = "Automated Cell Quant - O'Donnell Lab"),
+    titlePanel("PM Detection Algorithm Demo - O'Donnell Lab", windowTitle = "PM Detection Algorithm Demo - O'Donnell Lab"),
    wellPanel(
             #h4("Pipeline Options", align = "center"),
             fluidRow(
@@ -45,9 +40,8 @@ ui <- fluidPage(
           fluidRow(
             column(2,plotOutput("dic1")),
             column(2,plotOutput("dic2")),
-            column(2,plotOutput("dic4")),
-            column(2,plotOutput("dic8")),
-            column(2,plotOutput("dic16"))),
+            column(2,plotOutput("dic4"))),
+          
           
     
         
@@ -62,53 +56,37 @@ ui <- fluidPage(
 )
 
 # Define server logic required to draw a histogram
-server <- function(input, output) {
+server <- function(input, output, session) {
     
     values <- reactiveValues()
     
     # help buttons
     observeEvent(input$inputimage_help, {
         showModal(modalDialog(
-            title = "modal title input",
-            "this is the help text for input",
+            title = "Input Image",
+            "Select a .tif file.",
             easyClose = TRUE,
             footer = NULL
         ))
     })
     observeEvent(input$inputchannels_help, {
         showModal(modalDialog(
-            title = "modal title channel",
-            "this is the help text for channel",
+            title = "Input Channels",
+            "Frame numbers for the different channels of the .tif file.  If there is no DIC channel, leave the field blank.",
             easyClose = TRUE,
             footer = NULL
         ))
     })
     observeEvent(input$cutoffvalue_help, {
         showModal(modalDialog(
-            title = "modal title cutoff",
-            "this is the help text for cutoff",
+            title = "Cell Area Cutoff",
+            HTML(paste0("This should be obtained in imageJ using the \"Measure\" tool.  See the Automated Quant Tutorial for more details.")),
             easyClose = TRUE,
             footer = NULL
         ))
     })
-    observeEvent(input$algchoose_help, {
-      showModal(modalDialog(
-        title = "modal title algchoose",
-        "this is the help text for algchoose",
-        easyClose = TRUE,
-        footer = NULL
-      ))
-    })
-    observeEvent(input$factorchoose_help, {
-      showModal(modalDialog(
-        title = "modal title factorchoose",
-        "this is the help text for factorchoose",
-        easyClose = TRUE,
-        footer = NULL
-      ))
-    })
 
-       
+ 
     observeEvent(input$show_options,
     {
        if(is.null(input$input_image) || 
@@ -120,6 +98,22 @@ server <- function(input, output) {
          print("all not selected")
           return(NULL)       
        }
+      else if( !(str_trim(input$cmac_chan) %in% c("1", "2", "3")))
+      {
+        showModal(modalDialog(title = "Invalid Input", "Invalid value for CMAC channel.", easyClose = TRUE, footer = NULL))
+      }
+      else if( !(str_trim(input$gfp_chan) %in% c("1", "2", "3")))
+      {
+        showModal(modalDialog(title = "Invalid Input", "Invalid value for GFP channel.", easyClose = TRUE, footer = NULL))
+      }
+      else if( !(str_trim(input$dic_chan) %in% c("1", "2", "3", "")))
+      {
+        showModal(modalDialog(title = "Invalid Input", "Invalid value for DIC channel.", easyClose = TRUE, footer = NULL))
+      }
+      else if(any(duplicated(c(input$cmac_chan, input$dic_chan, input$gfp_chan))))
+      {
+        showModal(modalDialog(title="Invalid Input", "Different channels cannot have the same value", easyClose = TRUE, footer = NULL))
+      }
       else
       {
         progress <- shiny::Progress$new()
@@ -150,8 +144,6 @@ server <- function(input, output) {
             output$dic1 <- get_test(values$options$dic, values$options$channels,1)
             output$dic2 <- get_test(values$options$dic, values$options$channels,2)
             output$dic4 <- get_test(values$options$dic, values$options$channels,4)
-            output$dic8 <- get_test(values$options$dic, values$options$channels,8)
-            output$dic16 <- get_test(values$options$dic, values$options$channels,16)
           }
         }
       }
@@ -159,29 +151,15 @@ server <- function(input, output) {
     
 
     
-    observeEvent(input$run,
-    {
-        image_files <<- input$input_image
-        
-        if (is.null(image_files))
-        {
-            print('null')
-            return(NULL)
-        }
-        
-       
-            values$res <- pipeline(image_files,testing=FALSE, gui=FALSE, progress=NULL, interactive = FALSE, factor = 4, chan = gfp_channel, cutoff = 100) 
-       
-    })
+
     
-   # output$contents <- renderUI(
-        
-      #  if(is.null(values$res))
-     #       return(NULL)
-        #else
-          #  return(uiOutput(textOutput("DONE")))
-  #  )
-    
+    # Close the app when the session completes
+    if(!interactive()) {
+      session$onSessionEnded(function() {
+        stopApp()
+        q("no")
+      })
+    }
  
 
     

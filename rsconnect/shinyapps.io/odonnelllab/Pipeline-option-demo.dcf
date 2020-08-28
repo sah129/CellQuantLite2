@@ -1,0 +1,13 @@
+name: Pipeline-option-demo
+title: Pipeline-option-demo
+username:
+account: odonnelllab
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2694151
+bundleId: 3542867
+url: https://odonnelllab.shinyapps.io/Pipeline-option-demo/
+when: 1598035615.60532
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: app_ref2.R|app1old.R|pipelineoptions.Rmd|ref_app.R|testing.Rmd|test images/8-20-20 9ArrD Qdr2 316_001.tif|test images/aly1-del_aly2-del_415Git1_002.tif|FinalOutput

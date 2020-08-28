@@ -3,32 +3,13 @@
 # Returns a list of removed membrane objects, detected membrane objects,
 # and computed features.
 
-detect_membranes <-function(img, channels)
+detect_membranes <-function(img, channels, factor, chan, cutoff, cnum)
 {
-  message("########################CELLS########################")
-  ct = thresh(img[,,gfp_channel])
-  cm = bwlabel(ct)
-  fm <- computeFeatures.shape(cm)
-  noise <- which(fm[,"s.area"]< 100) # noise removal
-  
-  membranes <- rmObjects(cm, noise)
-  res <- remove_edge_membranes(membranes, img, channels)
-  
-  message(paste0("Number of cells detected on first pass: ", length(table(membranes))))
-  list(removed = res$removed, membranes = res$membranes, FM = res$FM)
-}
-
-detect_membranes_new <-function(img, channels, factor, chan, cutoff, cnum)
-{
-  message("########################CELLS########################")
+  message("\n########################CELLS########################")
   
  # chan <- normalize(chan)
-
-  
-
   g <- gblur(chan*factor, sigma = 2)
   
-
   
   ct = thresh(g)
   cm = bwlabel(ct)
@@ -38,12 +19,8 @@ detect_membranes_new <-function(img, channels, factor, chan, cutoff, cnum)
   message(paste0("Number of cells detected on first pass: ", length(table(cm))))
   
   membranes <- rmObjects(cm, noise)
-
-  
- 
   res <- remove_edge_membranes(membranes, img, channels, cnum)
   
-
   message(paste0("Number of cells after noise removal: ", length(table(membranes))))
   list(removed = res$removed, membranes = res$membranes, FM = res$FM)
 }
