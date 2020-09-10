@@ -29,14 +29,14 @@ ui <- fluidPage(
        
         
           #plotOutput("options_demo"),
-          h4("GFP Algorithm"),
+          h6("GFP Algorithm"),
           fluidRow(
             column(2,plotOutput("gfp1")),
             column(2,plotOutput("gfp2")),
             column(2,plotOutput("gfp4")),
             column(2,plotOutput("gfp8")),
             column(2,plotOutput("gfp16"))),
-          h4("DIC Algorithm"),
+          h6("DIC Algorithm"),
           fluidRow(
             column(2,plotOutput("dic1")),
             column(2,plotOutput("dic2")),

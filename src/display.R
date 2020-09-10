@@ -150,7 +150,7 @@ get_display_helper <- function(final, channels, title)
                   closed_vacuoles = TRUE, 
                   img = channels$gfp, 
                   showRemoved = FALSE, 
-                  showMemLabels = TRUE, 
+                  showMemLabels = FALSE, 
                   showVacLabels = FALSE)
   
 }
