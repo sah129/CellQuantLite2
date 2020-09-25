@@ -22,7 +22,7 @@ The program will be running on localhost:3838.
 A detailed installation tutorial for Docker and CellQuant is available [here](Tutorial/CellQuant-Installation-Instructions.pdf).
 
 
-PMDetectionDemo is also included as part of the CellQuant [bundled release](https://github.com/sah129/CellQuant/releases/tag/v0.8-alpha).
+PMDetectionDemo is also included as part of the CellQuant [bundled release](https://github.com/sah129/CellQuant/releases/).
 
 
 ## Dependencies
