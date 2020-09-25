@@ -5,8 +5,6 @@
 ## Overview
 PMDetectionDemo is a visual tool to help users configure the CellQuant automated pipeline.  Demonstrates all possible membrane detection algorithms at all possible settings. 
 
-![CellQuant](../assets/assets/images/original/logo3.png) 
-
 ## How to Run
 
 1.  Install [Docker](https://www.docker.com/products/docker-desktop)
